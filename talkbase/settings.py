@@ -38,9 +38,42 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
     'drf_yasg',
-    'authenticate'
+    'authenticate',
 ]
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    )
+}
+
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+   'AUTH_HEADER_TYPES': ('JWT',),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+}
+
+DJOSER = {
+    "LOGIN_FIELD": "email",
+    'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
+    'SEND_ACTIVATION_EMAIL': False,
+    "SEND_CONFIRMATION_EMAIL": False,
+    "SEND_PASSWORD_RESET_EMAIL": True,
+    "SEND_USERNAME_CHANGED_EMAIL": False,
+    "SEND_PASSWORD_CHANGED_EMAIL": False,
+    'PASSWORD_RESET_CONFIRM_RETYPE': True,
+    "SERIALIZERS": {
+        'user_create': 'authenticate.serializers.UserCreateSerializer',
+        'user': 'authenticate.serializers.UserSerializer',
+        'current_user': 'authenticate.serializers.UserSerializer',
+    },
+    'TOKEN_MODEL': None,
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -75,11 +108,11 @@ WSGI_APPLICATION = 'talkbase.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+import dj_database_url
+from decouple import config
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.parse(config('DATABASE_URL'))
 }
 
 
@@ -124,4 +157,9 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+AUTH_USER_MODEL = 'authenticate.User'
+
 AUTHENTICATION_BACKENDS = []  # Disable default auth system if not needed
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'no-reply@talkbase.com'
