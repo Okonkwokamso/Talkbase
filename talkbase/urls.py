@@ -48,4 +48,5 @@ urlpatterns = [
     path('auth/jwt/refresh', TokenRefreshView.as_view(), name='token_refresh'),
     path('auth/jwt/verify', TokenVerifyView.as_view(), name='token_verify'),
     path('', welcome, name='welcome'),
+    path('posts/', include('post.urls')),
 ]
