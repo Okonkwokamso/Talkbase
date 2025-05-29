@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-)!b-5j3v3$a&(*g&xdtr0k-syh2$_fc&tq5@yu+qv#ujj&bf8^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', 'talkbase.onrender.com']
 
 
 # Application definition
